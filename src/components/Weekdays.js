@@ -9,7 +9,7 @@ const Weekdays = (props) => {
   };
 
   return (
-    <div className="row d-none d-sm-flex">
+    <div className={`row d-none ${props.viewAsList ? 'd-none' : 'd-sm-flex'}`}>
       {this.renderWeekdays()}
     </div>
   );
@@ -17,6 +17,7 @@ const Weekdays = (props) => {
 
 Weekdays.propTypes = {
   weekdaysShort: PropTypes.arrayOf(PropTypes.string),
+  viewAsList: PropTypes.bool.isRequired,
 };
 
 Weekdays.defaultProps = {

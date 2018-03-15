@@ -6,14 +6,13 @@ import Weekdays from '../components/Weekdays';
 import Weeks from '../components/Weeks';
 
 const weekdaysShort = moment.weekdaysShort();
-// const months = moment.months();
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      viewAsList: false,
       dateContext: moment(),
-      // today: moment(),
     };
 
     this.getYear = this.getYear.bind(this);
@@ -25,6 +24,8 @@ class Calendar extends Component {
     this.lastDayOfMonth = this.lastDayOfMonth.bind(this);
     this.prevMonth = this.prevMonth.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
+    this.listView = this.listView.bind(this);
+    this.calendarView = this.calendarView.bind(this);
   }
 
   getYear() { return this.state.dateContext.format('Y'); }
@@ -47,6 +48,14 @@ class Calendar extends Component {
     this.setState({ dateContext });
   }
 
+  listView() {
+    this.setState({ viewAsList: true });
+  }
+
+  calendarView() {
+    this.setState({ viewAsList: false });
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -55,13 +64,21 @@ class Calendar extends Component {
           year={this.getYear()}
           prevMonth={this.prevMonth}
           nextMonth={this.nextMonth}
+          listView={this.listView}
+          calendarView={this.calendarView}
+          viewAsList={this.state.viewAsList}
         />
-        <Weekdays weekdaysShort={weekdaysShort} />
+        <Weekdays
+          weekdaysShort={weekdaysShort}
+          viewAsList={this.state.viewAsList}
+        />
         <Weeks
           firstDay={this.firstDayOfMonth()}
           lastDay={this.lastDayOfMonth()}
           daysInMonth={this.daysInMonth()}
           weeksInMonth={this.weeksInMonth()}
+          viewAsList={this.state.viewAsList}
+          weekdaysShort={weekdaysShort}
         />
       </div>);
   }
