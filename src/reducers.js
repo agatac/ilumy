@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   events: [],
 };
 
-export default function rootReducer(state = INITIAL_STATE, action) {
+const rootReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_EVENT:
       return Object.assign({}, state, {
@@ -13,4 +13,6 @@ export default function rootReducer(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default rootReducer;

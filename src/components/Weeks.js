@@ -63,6 +63,10 @@ Weeks.propTypes = {
   weeksInMonth: PropTypes.number.isRequired, //eslint-disable-line
   viewAsList: PropTypes.bool.isRequired,
   weekdaysShort: PropTypes.arrayOf(PropTypes.string), //eslint-disable-line
+  // events: PropTypes.arrayOf(PropTypes.object),
 };
+// Weeks.defaultProps = {
+//   events: [],
+// };
 
 export default Weeks;

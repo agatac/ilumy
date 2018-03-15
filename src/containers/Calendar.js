@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import Header from '../components/Header';
 import Weekdays from '../components/Weekdays';
 import Weeks from '../components/Weeks';
+import Modal from './Modal';
+import FloatingButton from '../components/FloatingButton';
+import { addEvent } from '../actions';
 
 const weekdaysShort = moment.weekdaysShort();
 
@@ -11,8 +16,8 @@ class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewAsList: false,
       dateContext: moment(),
+      viewAsList: false,
     };
 
     this.getYear = this.getYear.bind(this);
@@ -26,12 +31,12 @@ class Calendar extends Component {
     this.nextMonth = this.nextMonth.bind(this);
     this.listView = this.listView.bind(this);
     this.calendarView = this.calendarView.bind(this);
+    this.onModalSubmit = this.onModalSubmit.bind(this);
   }
 
   getYear() { return this.state.dateContext.format('Y'); }
   getMonth() { return this.state.dateContext.format('MMMM'); }
   getDay() { return this.state.dateContext.format('D'); }
-  getCurrentDate() { return this.state.dateContext.get('date'); }
 
   daysInMonth() { return this.state.dateContext.daysInMonth(); }
   weeksInMonth() { return Math.ceil(this.daysInMonth() / 7); }
@@ -54,6 +59,11 @@ class Calendar extends Component {
 
   calendarView() {
     this.setState({ viewAsList: false });
+  }
+
+  onModalSubmit(data) { //eslint-disable-line
+    this.props.dispatch(addEvent(data));
+    this.modal.resetState();
   }
 
   render() {
@@ -79,9 +89,28 @@ class Calendar extends Component {
           weeksInMonth={this.weeksInMonth()}
           viewAsList={this.state.viewAsList}
           weekdaysShort={weekdaysShort}
+          events={this.props.events}
         />
+        <Modal
+          ref={(modal) => { this.modal = modal; }}
+          today={this.state.dateContext}
+          onModalSubmit={this.onModalSubmit}
+        />
+        <FloatingButton />
       </div>);
   }
 }
 
-export default Calendar;
+Calendar.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.object),
+  dispatch: PropTypes.func.isRequired,
+};
+Calendar.defaultProps = {
+  events: [],
+};
+
+const mapStateToProps = state => ({
+  events: state.events,
+});
+
+export default connect(mapStateToProps)(Calendar);
