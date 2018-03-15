@@ -1,67 +1,70 @@
-import React from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 
-const Calendar = () => {
-  this.state = {
-    dateContext: moment(),
-  };
+import Header from '../components/Header';
+import Weekdays from '../components/Weekdays';
+import Weeks from '../components/Weeks';
 
-  this.weekdaysShort = moment.weekdaysShort();
-  // this.months = moment.months();
+const weekdaysShort = moment.weekdaysShort();
+// const months = moment.months();
 
-  this.getYear = () => this.state.dateContext.format('Y');
-  this.getMonth = () => this.state.dateContext.format('MMMM');
-  this.getDay = () => this.state.dateContext.format('D');
-  this.getCurrentDate = () => this.state.dateContext.get('date');
+class Calendar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dateContext: moment(),
+      // today: moment(),
+    };
 
-  this.daysInMonth = () => this.state.dateContext.daysInMonth();
-  // this.weeksInMonth = () => Math.ceil(this.daysInMonth() / 7);
-  this.firstDayOfMonth = () => moment(this.state.dateContext).startOf('month').format('d');
-  this.lastDayOfMonth = () => moment(this.state.dateContext).endOf('month').format('d');
+    this.getYear = this.getYear.bind(this);
+    this.getMonth = this.getMonth.bind(this);
+    this.getDay = this.getDay.bind(this);
+    this.daysInMonth = this.daysInMonth.bind(this);
+    this.weeksInMonth = this.weeksInMonth.bind(this);
+    this.firstDayOfMonth = this.firstDayOfMonth.bind(this);
+    this.lastDayOfMonth = this.lastDayOfMonth.bind(this);
+    this.prevMonth = this.prevMonth.bind(this);
+    this.nextMonth = this.nextMonth.bind(this);
+  }
 
-  this.renderWeekdays = () => {
-    return this.weekdaysShort.map((day) => {
-      return (<div key={day} className="col-sm">{day}</div>);
-    });
-  };
+  getYear() { return this.state.dateContext.format('Y'); }
+  getMonth() { return this.state.dateContext.format('MMMM'); }
+  getDay() { return this.state.dateContext.format('D'); }
+  getCurrentDate() { return this.state.dateContext.get('date'); }
 
-  this.renderWeeks = () => {
-    const days = [];
-    // if month doesn't start on Sunday (0)
-    let i = 0;
-    const first = this.firstDayOfMonth(); // 0-6
-    for (i; i < first; i += 1) {
-      days.push(<div key={`${i}empty`} className="col-sm">{''}</div>); //eslint-disable-line
-    }
-    // render all days
-    let day = 1;
-    const daysInMonth = this.daysInMonth();
-    for (day; day <= daysInMonth; day += 1) {
-      if (((first - 1) + day) % 7 === 0) {
-        days.push(<div key={`${day}break`} className="w-100" />);
-      }
-      days.push(<div key={`${day}day`} className="col-sm">{day}</div>);
-    }
-    // if month doesn't end on Sunday
-    let j = 6;
-    const last = this.lastDayOfMonth();
-    for (j; j > last; j -= 1) {
-      days.push(<div key={`${j}empty`} className="col-sm">{''}</div>); //eslint-disable-line
-    }
-    return days;
-  };
+  daysInMonth() { return this.state.dateContext.daysInMonth(); }
+  weeksInMonth() { return Math.ceil(this.daysInMonth() / 7); }
+  firstDayOfMonth() { return moment(this.state.dateContext).startOf('month').format('d'); }
+  lastDayOfMonth() { return moment(this.state.dateContext).endOf('month').format('d'); }
 
-  return (
-    <div className="container-fluid">
-      <h2>Calendar</h2>
-      <div className="row">
-        {this.renderWeekdays()}
-      </div>
-      <div className="row">
-        {this.renderWeeks()}
-      </div>
-      {/* <i data-feather="plus-circle"></i> */}
-    </div>);
-};
+  prevMonth() {
+    const dateContext = moment(this.state.dateContext).subtract(1, 'month');
+    this.setState({ dateContext });
+  }
+
+  nextMonth() {
+    const dateContext = moment(this.state.dateContext).add(1, 'month');
+    this.setState({ dateContext });
+  }
+
+  render() {
+    return (
+      <div className="container-fluid">
+        <Header
+          month={this.getMonth()}
+          year={this.getYear()}
+          prevMonth={this.prevMonth}
+          nextMonth={this.nextMonth}
+        />
+        <Weekdays weekdaysShort={weekdaysShort} />
+        <Weeks
+          firstDay={this.firstDayOfMonth()}
+          lastDay={this.lastDayOfMonth()}
+          daysInMonth={this.daysInMonth()}
+          weeksInMonth={this.weeksInMonth()}
+        />
+      </div>);
+  }
+}
 
 export default Calendar;
