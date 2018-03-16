@@ -39,7 +39,9 @@ class Calendar extends Component {
   getDay() { return this.state.dateContext.format('D'); }
 
   daysInMonth() { return this.state.dateContext.daysInMonth(); }
-  weeksInMonth() { return Math.ceil(this.daysInMonth() / 7); }
+  weeksInMonth() {
+    return Math.ceil((parseInt(this.daysInMonth(), 10) + parseInt(this.firstDayOfMonth(), 10)) / 7);
+  }
   firstDayOfMonth() { return moment(this.state.dateContext).startOf('month').format('d'); }
   lastDayOfMonth() { return moment(this.state.dateContext).endOf('month').format('d'); }
 
