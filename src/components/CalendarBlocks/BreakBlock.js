@@ -1,7 +1,5 @@
 import React from 'react';
 
-export default function BreakBlock(key) {
-  return (
-    <div key={key} className="w-100" />
-  );
-}
+const BreakBlock = () => <div className="w-100" />;
+
+export default BreakBlock;

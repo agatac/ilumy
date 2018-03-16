@@ -1,7 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function EmptyBlock(key, classes) {
-  return (
-    <div key={key} className={classes}>{''}</div> // eslint-disable-line
-  );
-}
+const EmptyBlock = props => <div className={props.classes} />;
+
+EmptyBlock.propTypes = {
+  classes: PropTypes.string,
+};
+EmptyBlock.defaultProps = {
+  classes: '',
+};
+
+export default EmptyBlock;

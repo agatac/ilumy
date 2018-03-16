@@ -16,13 +16,13 @@ const Weeks = (props) => {
     let i = 0;
     for (i; i < props.firstDay; i += 1) {
       const classes = `d-none border p-2 ${props.viewAsList ? '' : 'd-sm-flex col-sm'}`;
-      days.push(EmptyBlock(`${i}empty-begin`, classes));
+      days.push(<EmptyBlock key={`${i}empty-begin`} classes={classes} />);
     }
     // render all days
     let day = 1;
     for (day; day <= props.daysInMonth; day += 1) {
       if (!props.viewAsList && ((props.firstDay - 1) + day) % 7 === 0) {
-        days.push(BreakBlock(`${day}break`));
+        days.push(<BreakBlock key={`${day}break`} />);
       }
       const dayBlock = (
         <DayBlock
@@ -38,7 +38,8 @@ const Weeks = (props) => {
     // if month doesn't end on Sunday
     let j = 6;
     for (j; j > props.lastDay; j -= 1) {
-      days.push(EmptyBlock(`${j}empty-end`, `d-none border p-2 ${props.viewAsList ? '' : 'd-sm-flex col-sm'}`));
+      const classes = `d-none border p-2 ${props.viewAsList ? '' : 'd-sm-flex col-sm'}`;
+      days.push(<EmptyBlock key={`${j}empty-end`} classes={classes} />);
     }
     return days;
   };
