@@ -71,7 +71,7 @@ class Calendar extends Component {
   eventsThisMonth() {
     const currentMonth = this.getMonth();
     return this.props.events.filter((e) => {
-      return e.date.format('MMMM') === currentMonth;
+      return (e.date.format('MMMM') === currentMonth || e.repeat !== 'Doesn\'t repeat');
     });
   }
 

@@ -18,9 +18,11 @@ const Weeks = (props) => {
     // render all days
     let day = 1;
     for (day; day <= props.daysInMonth; day += 1) {
+      // break after 7 days in calendar view
       if (!props.viewAsList && ((props.firstDay - 1) + day) % 7 === 0) {
         days.push(<BreakBlock key={`${day}break`} />);
       }
+      const events = this.getEventsForDay(day);
       const dayBlock = (
         <DayBlock
           key={`${day}day`}
@@ -28,7 +30,9 @@ const Weeks = (props) => {
           styles={{ height: `${props.viewAsList ? '58px' : `calc((100vh - 8rem) / ${props.weeksInMonth})`}` }}
           day={day}
           dayName={props.viewAsList ? props.weekdaysShort[((props.firstDay - 1) + day) % 7] : ''}
-        />
+        >
+          { events.length > 0 && <EventItem events={events} />}
+        </DayBlock>
       );
       days.push(dayBlock);
     }
@@ -41,22 +45,18 @@ const Weeks = (props) => {
     return days;
   };
 
-  this.renderEvents = (days) => {
-    return days.map((d) => {
-      const events = props.events.filter((e) => {
-        return parseInt(e.date.format('D'), 10) === d.props.day;
-      });
-      return events.length ? React.cloneElement(
-        d,
-        d.props,
-        <EventItem events={events} />,
-      ) : d;
+  this.getEventsForDay = (day) => {
+    return props.events.filter((e) => {
+      const isSameDay = parseInt(e.date.format('D'), 10) === day;
+      const isSameDayName = e.date.format('ddd') === props.weekdaysShort[((props.firstDay - 1) + day) % 7];
+      return ((e.repeat === 'Weekly' && isSameDayName) ||
+        (e.repeat !== 'Weekly' && isSameDay));
     });
   };
 
   return (
     <div className={`row calendar ${props.viewAsList ? 'flex-column' : ''}`}>
-      {this.renderEvents(this.renderWeeks())}
+      {this.renderWeeks()}
     </div>
   );
 };
@@ -68,7 +68,7 @@ Weeks.propTypes = {
   weeksInMonth: PropTypes.number.isRequired, //eslint-disable-line
   viewAsList: PropTypes.bool.isRequired,
   weekdaysShort: PropTypes.arrayOf(PropTypes.string), //eslint-disable-line
-  events: PropTypes.arrayOf(PropTypes.object), //eslint-disable-line
+  events: PropTypes.arrayOf(PropTypes.object),
 };
 Weeks.defaultProps = {
   events: [],
