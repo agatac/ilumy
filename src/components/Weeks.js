@@ -4,12 +4,9 @@ import PropTypes from 'prop-types';
 import BreakBlock from './CalendarBlocks/BreakBlock';
 import EmptyBlock from './CalendarBlocks/EmptyBlock';
 import DayBlock from './CalendarBlocks/DayBlock';
+import EventItem from './CalendarBlocks/EventItem';
 
 const Weeks = (props) => {
-  this.getYear = (date) => { return date.format('Y'); };
-  this.getMonth = (date) => { return date.format('MMMM'); };
-  this.getDay = (date) => { return date.format('D'); };
-
   this.renderWeeks = () => {
     const days = [];
     // if month doesn't start on Sunday (0)
@@ -44,9 +41,22 @@ const Weeks = (props) => {
     return days;
   };
 
+  this.renderEvents = (days) => {
+    return days.map((d) => {
+      const events = props.events.filter((e) => {
+        return parseInt(e.date.format('D'), 10) === d.props.day;
+      });
+      return events.length ? React.cloneElement(
+        d,
+        d.props,
+        <EventItem events={events} />,
+      ) : d;
+    });
+  };
+
   return (
     <div className={`row calendar ${props.viewAsList ? 'flex-column' : ''}`}>
-      {this.renderWeeks()}
+      {this.renderEvents(this.renderWeeks())}
     </div>
   );
 };
@@ -58,11 +68,10 @@ Weeks.propTypes = {
   weeksInMonth: PropTypes.number.isRequired, //eslint-disable-line
   viewAsList: PropTypes.bool.isRequired,
   weekdaysShort: PropTypes.arrayOf(PropTypes.string), //eslint-disable-line
-  // month: PropTypes.number.isRequired,
-  // events: PropTypes.arrayOf(PropTypes.object),
+  events: PropTypes.arrayOf(PropTypes.object), //eslint-disable-line
 };
-// Weeks.defaultProps = {
-//   events: [],
-// };
+Weeks.defaultProps = {
+  events: [],
+};
 
 export default Weeks;

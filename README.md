@@ -2,10 +2,11 @@ NOTES:
 This is an ejected create-react-app - might seems messy, especially the linting.
 
 What I'd change if I was working on it further:
-- split larger components into smaller pieces, pay attention to the difference between presentation and logic components.
-- replace bootstrap modal with react modal component.
-- get rid of jQuery!! (which is required by bootstrap.js and modal)
-- learn how to write tests.
+- split larger components into smaller pieces, pay attention to the difference between presentation and logic components,
+- add form validation for submitting a new event,
+- replace bootstrap modal with react modal component,
+- get rid of jQuery!! (which is required by bootstrap.js and modal),
+- learn how to write tests,
 - spend more time on accessibility issues (all those // eslint-diable exceptions).
 
 

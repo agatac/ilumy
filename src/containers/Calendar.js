@@ -68,6 +68,13 @@ class Calendar extends Component {
     this.modal.resetState();
   }
 
+  eventsThisMonth() {
+    const currentMonth = this.getMonth();
+    return this.props.events.filter((e) => {
+      return e.date.format('MMMM') === currentMonth;
+    });
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -91,7 +98,7 @@ class Calendar extends Component {
           weeksInMonth={this.weeksInMonth()}
           viewAsList={this.state.viewAsList}
           weekdaysShort={weekdaysShort}
-          events={this.props.events}
+          events={this.eventsThisMonth()}
         />
         <Modal
           ref={(modal) => { this.modal = modal; }}

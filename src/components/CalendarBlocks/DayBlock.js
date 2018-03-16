@@ -21,9 +21,6 @@ const DayBlock = (props) => {
   );
 };
 
-// export default function DayBlock(props, children) {
-//
-// }
 DayBlock.propTypes = {
   classes: PropTypes.string,
   styles: PropTypes.object, // eslint-disable-line
